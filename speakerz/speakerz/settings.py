@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
+PRODUCTION = os.environ.get("INDIGO_PRODUCTION", False)
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -21,12 +22,19 @@ STATICFILES_DIR = os.path.join(BASE_DIR,'static')
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'qzf1o3-5$*exzz=h^(%-0vzbgg#s1*gck!%-kf1kvy14@rm@du'
+if PRODUCTION:
+    SECRET_KEY = os.environ['SECRET_KEY']
+else:
+    SECRET_KEY = 'qzf1o3-5$*exzz=h^(%-0vzbgg#s1*gck!%-kf1kvy14@rm@du'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+DEBUG = not PRODUCTION
+
+if PRODUCTION:
+    ALLOWED_HOSTS = os.environ["INDIGO_ALLOWED_HOSTS"].split(",")
+else:
+    ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -38,6 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'core',
 ]
 
 MIDDLEWARE = [
@@ -74,13 +83,16 @@ WSGI_APPLICATION = 'speakerz.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, '../db.sqlite3'),
+if PRODUCTION:
+    # setup production  db. Dont use connection password in the docs
+    pass
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, '../db.sqlite3'),
+        }
     }
-}
-
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -129,5 +141,4 @@ LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'home'
 
-# check if add:
-# AUTH_USER_MODEL = 'core.User'
+AUTH_USER_MODEL = 'core.User'
