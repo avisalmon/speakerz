@@ -30,13 +30,22 @@ class UserManager(BaseUserManager):
 class User(AbstractBaseUser, PermissionsMixin):
     """ Custom User nodel that supports using email instead of username"""
     email = models.EmailField(max_length=255, unique=True)
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=50)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
 
     objects = UserManager()
 
     USERNAME_FIELD = 'email'
+
+    # general info:
+    bio = models.TextField(max_length=12800, blank=True)
+    profile_picture = models.ImageField(
+        blank=True,
+        null=True,
+        upload_to=settings.PROFILE_PICS_DIRECTORY)
+
+    link = models.CharField(max_length=50, blank=True)
 
     def __str__(self):
         return f'{self.name} ({self.email})'

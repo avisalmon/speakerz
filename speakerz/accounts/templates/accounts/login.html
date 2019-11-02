@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% load bootstrap3 %}
+{% load socialaccount %}
+
+{% block content %}
+<div class="container">
+<h1>You can Log in with your social network:</h1>
+  <div class="presentation-only">
+    <div class="social-button">
+      <a class="iwh myacc" href="{% provider_login_url 'github' %}"> Sign In with GitHub</a>
+    </div>
+    <div class="social-button">
+      <a class="gsign" href="{% provider_login_url 'google' %}"><span class="gicon s-ico"></span>Sign in with Google</a>
+    </div>
+    <div class="social-button">
+      <a class="fb" href="{% provider_login_url 'facebook' method="oauth2" %}"><span class="ficon s-ico"></span>Facebook (Future)</a>
+    </div>
+
+  </div>
+
+  <h1>Or Log In</h1>
+  <form method="POST">
+    {% csrf_token %}
+    {% bootstrap_form form %}
+    <input type="submit" class 'btn btn-default' value="Log In">
+
+  </form>
+
+
+</div>
+
+
+
+{% endblock content %}
