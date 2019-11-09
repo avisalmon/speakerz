@@ -151,9 +151,10 @@ if PRODUCTION:
 else:
     STATICFILES_DIR = os.path.join(BASE_DIR,'static')
     STATIC_URL = '/static/'
-    MEDIA_URL = '/media/'
-    PROFILE_PICS_DIRECTORY = "profile_pictures/"
+    MEDIA_URL = '/'
+    PROFILE_PICS_DIRECTORY = "media/profile_pictures/"
 
+    #MEDIA_ROOT = BASE_DIR
     MEDIA_ROOT = BASE_DIR
 
 
